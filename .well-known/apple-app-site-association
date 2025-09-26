@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "NZF9U5X2D3.io.fitpoke.app",
+        "paths": ["/reset-password*"]
+      }
+    ]
+  }
+}
