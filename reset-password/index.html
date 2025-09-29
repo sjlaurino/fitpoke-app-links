@@ -9,32 +9,17 @@
     .btn { display:inline-block; background:#ff6b9d; color:#fff; padding:12px 18px; border-radius:8px; text-decoration:none; font-weight:600; }
     .muted { color:#666; font-size:14px; margin-top:12px; }
   </style>
-  <script>
-  function getParam(name){ return new URLSearchParams(location.search).get(name) || ''; }
-  function buildScheme() {
-    const token = encodeURIComponent(getParam('token'));
-    const email = encodeURIComponent(getParam('email'));
-    return 'fitpoke://reset-password?token=' + token + '&email=' + email;
-  }
-  function attemptOpen() {
-    const scheme = buildScheme();
-    // 1) Direct href (works in many in-app browsers)
-    window.location.href = scheme;
-    // 2) Fallback via hidden iframe (Gmail/Spark often need this)
-    setTimeout(() => {
-      const ifr = document.createElement('iframe');
-      ifr.style.display = 'none';
-      ifr.src = scheme;
-      document.body.appendChild(ifr);
-    }, 200);
-    // Show fallback after 1.2s
-    setTimeout(() => { document.getElementById('fallback').style.display='block'; }, 1200);
+<script>
+  function q(n){return new URLSearchParams(location.search).get(n)||''}
+  function scheme(){
+    return 'fitpoke://reset-password?token=' + encodeURIComponent(q('token')) +
+           '&email=' + encodeURIComponent(q('email'));
   }
   window.addEventListener('load', () => {
-    const scheme = buildScheme();
+    const s = scheme();
     const btn = document.getElementById('openBtn');
-    btn.href = scheme;                 // make the button a real link
-    attemptOpen();                     // auto-attempt on load
+    btn.href = s;               // user-gesture click opens the app
+    document.getElementById('fallback').style.display='block';
   });
 </script>
 </head>
