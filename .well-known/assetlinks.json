@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.fitpoke.app",
+    "sha256_cert_fingerprints": ["5E:33:FC:98:8F:3B:B1:C8:43:FB:9C:9D:49:AA:AA:97:1D:7B:6B:82:F3:2E:CE:53:63:0E:89:66:3B:48:DD:33"]
+  }
+}]
