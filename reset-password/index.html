@@ -10,23 +10,38 @@
     .muted { color:#666; font-size:14px; margin-top:12px; }
   </style>
   <script>
-    function getParam(name){ return new URLSearchParams(location.search).get(name) || ''; }
-    function openApp(){
-      var token = encodeURIComponent(getParam('token'));
-      var email = encodeURIComponent(getParam('email'));
-      var url = 'fitpoke://reset-password?token=' + token + '&email=' + email;
-      // Attempt immediate handoff to app
-      window.location.replace(url);
-      // After 1.2s, show fallback UI if the app didn’t open
-      setTimeout(function(){ document.getElementById('fallback').style.display='block'; }, 1200);
-    }
-    window.addEventListener('load', openApp);
-  </script>
+  function getParam(name){ return new URLSearchParams(location.search).get(name) || ''; }
+  function buildScheme() {
+    const token = encodeURIComponent(getParam('token'));
+    const email = encodeURIComponent(getParam('email'));
+    return 'fitpoke://reset-password?token=' + token + '&email=' + email;
+  }
+  function attemptOpen() {
+    const scheme = buildScheme();
+    // 1) Direct href (works in many in-app browsers)
+    window.location.href = scheme;
+    // 2) Fallback via hidden iframe (Gmail/Spark often need this)
+    setTimeout(() => {
+      const ifr = document.createElement('iframe');
+      ifr.style.display = 'none';
+      ifr.src = scheme;
+      document.body.appendChild(ifr);
+    }, 200);
+    // Show fallback after 1.2s
+    setTimeout(() => { document.getElementById('fallback').style.display='block'; }, 1200);
+  }
+  window.addEventListener('load', () => {
+    const scheme = buildScheme();
+    const btn = document.getElementById('openBtn');
+    btn.href = scheme;                 // make the button a real link
+    attemptOpen();                     // auto-attempt on load
+  });
+</script>
 </head>
 <body>
   <h2>Opening Fitpoke…</h2>
   <p>If nothing happens, tap the button below to continue in the app.</p>
-  <p><a class="btn" id="openBtn" href="#" onclick="openApp();return false;">Open in Fitpoke</a></p>
+  <p><a class="btn" id="openBtn">Open in Fitpoke</a></p>
   <div id="fallback" class="muted" style="display:none">
     Still not working? Open the Fitpoke app manually and choose “Reset Password” again.
   </div>
